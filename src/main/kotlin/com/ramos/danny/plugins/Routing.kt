@@ -9,7 +9,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 
-@Suppress("IMPLICIT_CAST_TO_ANY")
 fun Application.configureRouting() {
   routing {
     get("/") {
@@ -26,15 +25,15 @@ fun Application.configureRouting() {
         return@get }
       val browserStackThreads = call.request.queryParameters[testThreads]?.toIntOrNull()
 
-      val url = URLBuilder(
+      val buildURL = URLBuilder(
         URLProtocol.HTTPS,
         hostURL,
         pathSegments = listOf(appAutomate, framework, apiVersion, builds, buildId)
       ).buildString()
 
-      val build: Build = client.get(url).body()
-      BrowserStack().runFailedTests(build)
-//      call.respondText(BrowserStack(build).getFailedTests().toString(), status = HttpStatusCode.OK)
+      val browserStackBuild: Build = client.get(buildURL).body()
+
+      call.respondText(BrowserStack().runFailedTests(browserStackBuild), status = HttpStatusCode.OK)
     }
   }
 }

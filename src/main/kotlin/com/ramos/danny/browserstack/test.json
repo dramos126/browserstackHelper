@@ -1,1 +1,178 @@
-{"id":"a33f21fc6b8bf3a055aed1fd4ad552fd54db5881","framework":"xcuitest","duration":5017,"status":"failed","input_capabilities":{"devices":["iPad Pro 12.9 2020-16"],"project":"Overstock-iOS","debugscreenshots":"true","deviceLogs":"true","networkLogs":"true","shards":{"deviceSelection":"any","numberOfShards":4,"mapping":[{"name":"Shard 0","strategy":"only-testing","values":["/NotificationsTests","/RecentlyViewedTests","/CartTests"]},{"name":"Shard 1","strategy":"only-testing","values":["/ListsTests","/SignInTests","/DefaultCouponByCartSizeTests"]},{"name":"Shard 2","strategy":"only-testing","values":["/SharedListTests","/LatestOrderTests","/Tests"]},{"name":"Shard 3","strategy":"only-testing","values":["/SearchTests","/HomeScreenTests","/DeepLinkTests"]}]},"app":"2023.1.1_1356","testSuite":"XCUITestRunner_2023.1.1_1356","setEnvVariables":{"IS_BROWSERSTACK":"true","BUILD_NUMBER":"2023.1.1 (1356)","IS_TEST_SCHEME":"true"},"buildTag":"functional_production"},"start_time":"2023-01-09 23:56:05 UTC","app_details":{"url":"bs://ee6f330aee0c3e237f5c31bad2adfebe9fcfd414","bundle_id":"com.overstock.app-dev","version":"2023.1.1","name":"Overstock_2023.1.1_1356.ipa","custom_id":"2023.1.1_1356"},"test_suite_details":{"url":"bs://14bac14269d630c2c6edf36f344d211763e43db0","bundle_id":"com.overstock.Overstock-UI-Tests.xctrunner","version":"1.0","name":"OverstockUITests-Runner.zip","custom_id":"XCUITestRunner_2023.1.1_1356"},"devices":[{"device":"iPad Pro 12.9 2020","os":"ios","os_version":"16.1","sharding":true,"sessions":[{"id":"c45cae0551329edfbebc7b80500c5514541b8bd0","status":"failed","start_time":"2023-01-09 23:57:53 +0000","duration":1478,"shard":{"name":"Shard 0","strategy":"only-testing"},"testcases":{"count":16,"status":{"passed":11,"failed":5,"skipped":0,"timedout":0,"error":0,"running":0,"queued":0}}},{"id":"9535809642ff5bc4c0fb53e6f597d2568dafe128","status":"passed","start_time":"2023-01-09 23:57:53 +0000","duration":1719,"shard":{"name":"Shard 1","strategy":"only-testing"},"testcases":{"count":19,"status":{"passed":19,"failed":0,"skipped":0,"timedout":0,"error":0,"running":0,"queued":0}}},{"id":"27f147d5ec5a08477998d6758758e172c56508c4","status":"passed","start_time":"2023-01-10 00:28:06 +0000","duration":507,"shard":{"name":"Shard 2","strategy":"only-testing"},"testcases":{"count":9,"status":{"passed":9,"failed":0,"skipped":0,"timedout":0,"error":0,"running":0,"queued":0}}},{"id":"1a0ab4408bde66b88fbb7653f6c94f6dd694ce08","status":"failed","start_time":"2023-01-10 00:24:15 +0000","duration":3326,"shard":{"name":"Shard 3","strategy":"only-testing"},"testcases":{"count":33,"status":{"passed":31,"failed":2,"skipped":0,"timedout":0,"error":0,"running":0,"queued":0}}}]}]}
+{
+  "id": "a33f21fc6b8bf3a055aed1fd4ad552fd54db5881",
+  "framework": "xcuitest",
+  "duration": 5017,
+  "status": "failed",
+  "input_capabilities": {
+    "devices": [
+      "iPad Pro 12.9 2020-16"
+    ],
+    "project": "Overstock-iOS",
+    "debugscreenshots": "true",
+    "deviceLogs": "true",
+    "networkLogs": "true",
+    "shards": {
+      "deviceSelection": "any",
+      "numberOfShards": 4,
+      "mapping": [
+        {
+          "name": "Shard 0",
+          "strategy": "only-testing",
+          "values": [
+            "/NotificationsTests",
+            "/RecentlyViewedTests",
+            "/CartTests"
+          ]
+        },
+        {
+          "name": "Shard 1",
+          "strategy": "only-testing",
+          "values": [
+            "/ListsTests",
+            "/SignInTests",
+            "/DefaultCouponByCartSizeTests"
+          ]
+        },
+        {
+          "name": "Shard 2",
+          "strategy": "only-testing",
+          "values": [
+            "/SharedListTests",
+            "/LatestOrderTests",
+            "/Tests"
+          ]
+        },
+        {
+          "name": "Shard 3",
+          "strategy": "only-testing",
+          "values": [
+            "/SearchTests",
+            "/HomeScreenTests",
+            "/DeepLinkTests"
+          ]
+        }
+      ]
+    },
+    "app": "2023.1.1_1356",
+    "testSuite": "XCUITestRunner_2023.1.1_1356",
+    "setEnvVariables": {
+      "IS_BROWSERSTACK": "true",
+      "BUILD_NUMBER": "2023.1.1 (1356)",
+      "IS_TEST_SCHEME": "true"
+    },
+    "buildTag": "functional_production"
+  },
+  "start_time": "2023-01-09 23:56:05 UTC",
+  "app_details": {
+    "url": "bs://ee6f330aee0c3e237f5c31bad2adfebe9fcfd414",
+    "bundle_id": "com.overstock.app-dev",
+    "version": "2023.1.1",
+    "name": "Overstock_2023.1.1_1356.ipa",
+    "custom_id": "2023.1.1_1356"
+  },
+  "test_suite_details": {
+    "url": "bs://14bac14269d630c2c6edf36f344d211763e43db0",
+    "bundle_id": "com.overstock.Overstock-UI-Tests.xctrunner",
+    "version": "1.0",
+    "name": "OverstockUITests-Runner.zip",
+    "custom_id": "XCUITestRunner_2023.1.1_1356"
+  },
+  "devices": [
+    {
+      "device": "iPad Pro 12.9 2020",
+      "os": "ios",
+      "os_version": "16.1",
+      "sharding": true,
+      "sessions": [
+        {
+          "id": "c45cae0551329edfbebc7b80500c5514541b8bd0",
+          "status": "failed",
+          "start_time": "2023-01-09 23:57:53 +0000",
+          "duration": 1478,
+          "shard": {
+            "name": "Shard 0",
+            "strategy": "only-testing"
+          },
+          "testcases": {
+            "count": 16,
+            "status": {
+              "passed": 11,
+              "failed": 5,
+              "skipped": 0,
+              "timedout": 0,
+              "error": 0,
+              "running": 0,
+              "queued": 0
+            }
+          }
+        },
+        {
+          "id": "9535809642ff5bc4c0fb53e6f597d2568dafe128",
+          "status": "passed",
+          "start_time": "2023-01-09 23:57:53 +0000",
+          "duration": 1719,
+          "shard": {
+            "name": "Shard 1",
+            "strategy": "only-testing"
+          },
+          "testcases": {
+            "count": 19,
+            "status": {
+              "passed": 19,
+              "failed": 0,
+              "skipped": 0,
+              "timedout": 0,
+              "error": 0,
+              "running": 0,
+              "queued": 0
+            }
+          }
+        },
+        {
+          "id": "27f147d5ec5a08477998d6758758e172c56508c4",
+          "status": "passed",
+          "start_time": "2023-01-10 00:28:06 +0000",
+          "duration": 507,
+          "shard": {
+            "name": "Shard 2",
+            "strategy": "only-testing"
+          },
+          "testcases": {
+            "count": 9,
+            "status": {
+              "passed": 9,
+              "failed": 0,
+              "skipped": 0,
+              "timedout": 0,
+              "error": 0,
+              "running": 0,
+              "queued": 0
+            }
+          }
+        },
+        {
+          "id": "1a0ab4408bde66b88fbb7653f6c94f6dd694ce08",
+          "status": "failed",
+          "start_time": "2023-01-10 00:24:15 +0000",
+          "duration": 3326,
+          "shard": {
+            "name": "Shard 3",
+            "strategy": "only-testing"
+          },
+          "testcases": {
+            "count": 33,
+            "status": {
+              "passed": 31,
+              "failed": 2,
+              "skipped": 0,
+              "timedout": 0,
+              "error": 0,
+              "running": 0,
+              "queued": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

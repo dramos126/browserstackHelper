@@ -1,23 +1,75 @@
 package com.ramos.danny.browserstack
 
 import com.ramos.danny.client
+import com.ramos.danny.utils.toJsonElement
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.json.*
 
 class BrowserStack {
   lateinit var browserStackBuild: Build
   private val failedSessions = mutableListOf<DeviceSessions>()
   private val failedTests = mutableListOf<String>()
 
-  suspend fun runFailedTests(build: Build, shards: Int? = 2) {
-    browserStackBuild = build
+  suspend fun runFailedTests(browserStackBuild: Build, shards: Int = 2): String {
+    this.browserStackBuild = browserStackBuild
     getFailedTests()
+    createRetryRequestObject(shards)
 
+    val url = URLBuilder(
+      URLProtocol.HTTPS,
+      hostURL,
+      pathSegments = listOf(appAutomate, browserStackBuild.framework, apiVersion, build)
+    ).buildString()
+
+    val response: Build = client.post(url) {
+      headers { append(HttpHeaders.ContentType, "application/json") }
+      setBody(createRetryRequestObject(shards))
+    }.body()
+
+    return response.id
   }
 
-  private fun createShardObject(shards: Int) {
-    var mappings = emptyMap<String, Any>()
+  private fun createRetryRequestObject(shards: Int): JsonElement {
+    var requestObject = mapOf(
+      "shards" to createShardsObject(shards),
+      "app" to browserStackBuild.input_capabilities.app,
+      "testSuite" to browserStackBuild.input_capabilities.testSuite,
+      "testSuite" to browserStackBuild.input_capabilities.testSuite,
+      "buildTag" to "${browserStackBuild.input_capabilities.buildTag}_retry",
+      "project" to browserStackBuild.input_capabilities.project,
+      "networkLogs" to browserStackBuild.input_capabilities.networkLogs,
+      "deviceLogs" to browserStackBuild.input_capabilities.deviceLogs,
+      "debugscreenshots" to browserStackBuild.input_capabilities.debugscreenshots,
+      "devices" to browserStackBuild.input_capabilities.devices
+    )
+    return requestObject.toJsonElement()
+  }
+
+  private fun createShardsObject(shards: Int): Map<String, Any> {
+    val mapping = mutableListOf<Any>()
+    val chunckedBy = if (failedTests.size % shards != 0) {
+      failedTests.size / shards + 1
+    } else {
+      failedTests.size / shards
+    }
+    val listOfFailedLists = failedTests.chunked(chunckedBy)
+
+    for (i in 0 until shards) {
+      val shard = mapOf(
+        "name" to "Shard $i",
+        "strategy" to "only-testing",
+        "values" to listOfFailedLists[i]
+      )
+      mapping.add(shard)
+    }
+
+    return mapOf<String, Any>(
+      "numberOfShards" to shards,
+      "deviceSelection" to "any",
+      "mapping" to mapping
+    )
   }
 
   private suspend fun getFailedTests() {
