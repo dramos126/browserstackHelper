@@ -11,11 +11,11 @@ data class Build(
 
 @Serializable
 data class Devices(
-    val sessions: List<Sessions>
+    val sessions: List<DeviceSessions>
 )
 
 @Serializable
-data class Sessions(
+data class DeviceSessions(
     val id: String,
     val status: String
 )

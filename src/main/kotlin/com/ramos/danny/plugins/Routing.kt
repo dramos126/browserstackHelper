@@ -17,14 +17,14 @@ fun Application.configureRouting() {
     }
 
     get("/retry") {
-      val buildId = call.request.queryParameters[build] ?: "".apply {
-        call.respondText(
-          "Missing 'build' parameter",
-          status = HttpStatusCode.BadRequest
-        )
+      val buildId = call.request.queryParameters[build] ?: "".also {
+        call.respondText("Missing 'build' parameter", status = HttpStatusCode.BadRequest)
+        return@get
       }
-      val framework: String = call.request.queryParameters[framework]?.lowercase()
-        ?: "".apply { call.respondText("Missing 'framework' parameter", status = HttpStatusCode.BadRequest) }
+      val framework = call.request.queryParameters[framework]?.lowercase() ?: "".also {
+        call.respondText("Missing 'framework' parameter", status = HttpStatusCode.BadRequest)
+        return@get }
+      val browserStackThreads = call.request.queryParameters[testThreads]?.toIntOrNull()
 
       val url = URLBuilder(
         URLProtocol.HTTPS,
@@ -32,8 +32,9 @@ fun Application.configureRouting() {
         pathSegments = listOf(appAutomate, framework, apiVersion, builds, buildId)
       ).buildString()
 
-      val browserStackBuild: Build = client.get(url).body()
-      call.respondText(RetryTests(browserStackBuild).getFailedTests().toString(), status = HttpStatusCode.OK)
+      val build: Build = client.get(url).body()
+      BrowserStack().runFailedTests(build)
+//      call.respondText(BrowserStack(build).getFailedTests().toString(), status = HttpStatusCode.OK)
     }
   }
 }

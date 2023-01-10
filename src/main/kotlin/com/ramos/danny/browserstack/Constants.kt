@@ -15,7 +15,9 @@ const val buildSessions = "sessions"
 const val ios = "ios"
 const val android = "android"
 
+const val testThreads = "testThreads"
 const val build = "build"
 const val framework = "framework"
 const val passed = "passed"
 const val failed = "failed"
+
