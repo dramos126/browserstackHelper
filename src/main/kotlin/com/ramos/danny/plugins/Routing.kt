@@ -24,7 +24,7 @@ fun Application.configureRouting() {
       val framework = call.request.queryParameters[framework]?.lowercase() ?: "".also {
         call.respondText("Missing 'framework' parameter", status = HttpStatusCode.BadRequest)
         return@get }
-      val browserStackThreads = call.request.queryParameters[testThreads]?.toIntOrNull()
+      val browserStackShards = call.request.queryParameters[testShards]?.toIntOrNull()
 
       val buildURL = URLBuilder(
         URLProtocol.HTTPS,
@@ -34,7 +34,7 @@ fun Application.configureRouting() {
 
       val browserStackBuild: BrowserStackBuild = client.get(buildURL).body()
 
-      call.respondText(browserStack.runFailedTests(browserStackBuild, browserStackThreads ?: 2), status = HttpStatusCode.OK)
+      call.respondText(browserStack.runFailedTests(browserStackBuild, browserStackShards ?: 2), status = HttpStatusCode.OK)
     }
   }
 }

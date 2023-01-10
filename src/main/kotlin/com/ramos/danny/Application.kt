@@ -12,8 +12,6 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-
-
 fun main() {
   embeddedServer(Netty, port = 8088, host = "0.0.0.0", module = Application::module)
     .start(wait = true)

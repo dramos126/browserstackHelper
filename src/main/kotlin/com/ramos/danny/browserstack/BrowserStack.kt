@@ -15,7 +15,7 @@ class BrowserStack {
 
   suspend fun runFailedTests(browserStackBuild: BrowserStackBuild, shards: Int): String {
     this.browserStackBuild = browserStackBuild
-    getFailedTests()
+    filterFailedTests()
     createRetryRequestObject(shards)
 
     val url = URLBuilder(
@@ -55,13 +55,13 @@ class BrowserStack {
     } else {
       failedTests.size / shards
     }
-    val listOfFailedLists = failedTests.chunked(chunckedBy)
+    val listOfFailedTestLists = failedTests.chunked(chunckedBy)
 
     for (i in 0 until shards) {
       val shard = mapOf(
         "name" to "Shard $i",
         "strategy" to "only-testing",
-        "values" to listOfFailedLists[i]
+        "values" to listOfFailedTestLists[i]
       )
       mapping.add(shard)
     }
@@ -73,8 +73,8 @@ class BrowserStack {
     )
   }
 
-  private suspend fun getFailedTests() {
-    getFailedSessions()
+  private suspend fun filterFailedTests() {
+    filterFailedSessions()
     failedSessions.forEach { deviceSession ->
       val url = URLBuilder(
         URLProtocol.HTTPS,
@@ -101,7 +101,7 @@ class BrowserStack {
     }
   }
 
-  private fun getFailedSessions() {
+  private fun filterFailedSessions() {
     browserStackBuild.devices.forEach { device ->
       device.sessions.forEach { session ->
         if (session.status != passed) {
