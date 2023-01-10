@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 
 fun main() {
-  embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
+  embeddedServer(Netty, port = 8088, host = "0.0.0.0", module = Application::module)
     .start(wait = true)
 }
 
@@ -33,9 +33,8 @@ val client = HttpClient(CIO) {
   }
 }
 
-
 fun Application.module() {
   configureMonitoring()
-  configureSerialization()
+//  configureSerialization()
   configureRouting()
 }

@@ -3,7 +3,7 @@ package com.ramos.danny.browserstack
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Build(
+data class BrowserStackBuild(
   val id: String,
   val framework: String,
   val devices: List<Devices>,
@@ -37,5 +37,5 @@ data class InputCapabilities(
 @Serializable
 data class EnvVariables(
   val IS_BROWSERSTACK: Boolean,
-  val BUILD_NUMBER: String
+  val BUILD_NUMBER: String?
 )

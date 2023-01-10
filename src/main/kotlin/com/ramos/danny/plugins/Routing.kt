@@ -15,7 +15,8 @@ fun Application.configureRouting() {
       call.respondText("Hello World!")
     }
 
-    get("/retry") {
+    get("/browserstack/retry") {
+      val browserStack = BrowserStack()
       val buildId = call.request.queryParameters[build] ?: "".also {
         call.respondText("Missing 'build' parameter", status = HttpStatusCode.BadRequest)
         return@get
@@ -31,9 +32,9 @@ fun Application.configureRouting() {
         pathSegments = listOf(appAutomate, framework, apiVersion, builds, buildId)
       ).buildString()
 
-      val browserStackBuild: Build = client.get(buildURL).body()
+      val browserStackBuild: BrowserStackBuild = client.get(buildURL).body()
 
-      call.respondText(BrowserStack().runFailedTests(browserStackBuild), status = HttpStatusCode.OK)
+      call.respondText(browserStack.runFailedTests(browserStackBuild, browserStackThreads ?: 2), status = HttpStatusCode.OK)
     }
   }
 }

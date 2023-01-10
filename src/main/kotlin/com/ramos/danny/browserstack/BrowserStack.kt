@@ -1,5 +1,6 @@
 package com.ramos.danny.browserstack
 
+import com.ramos.danny.browserstack.response.BuildRequest
 import com.ramos.danny.client
 import com.ramos.danny.utils.toJsonElement
 import io.ktor.client.call.*
@@ -8,11 +9,11 @@ import io.ktor.http.*
 import kotlinx.serialization.json.*
 
 class BrowserStack {
-  lateinit var browserStackBuild: Build
+  private lateinit var browserStackBuild: BrowserStackBuild
   private val failedSessions = mutableListOf<DeviceSessions>()
   private val failedTests = mutableListOf<String>()
 
-  suspend fun runFailedTests(browserStackBuild: Build, shards: Int = 2): String {
+  suspend fun runFailedTests(browserStackBuild: BrowserStackBuild, shards: Int): String {
     this.browserStackBuild = browserStackBuild
     getFailedTests()
     createRetryRequestObject(shards)
@@ -23,12 +24,12 @@ class BrowserStack {
       pathSegments = listOf(appAutomate, browserStackBuild.framework, apiVersion, build)
     ).buildString()
 
-    val response: Build = client.post(url) {
+    val response: BuildRequest = client.post(url) {
       headers { append(HttpHeaders.ContentType, "application/json") }
       setBody(createRetryRequestObject(shards))
     }.body()
 
-    return response.id
+    return response.build_id ?: ""
   }
 
   private fun createRetryRequestObject(shards: Int): JsonElement {
