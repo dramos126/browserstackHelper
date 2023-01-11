@@ -17,10 +17,13 @@ fun main() {
     .start(wait = true)
 }
 
+private val browserStackUsername = System.getenv("user")
+private val browserStackPassword = System.getenv("password")
+
 val client = HttpClient(CIO) {
   expectSuccess = true
   install(Auth) {
-    basic { credentials { BasicAuthCredentials("", "") } }
+    basic { credentials { BasicAuthCredentials(browserStackUsername, browserStackPassword) } }
   }
   install(ContentNegotiation) {
     json(Json {
