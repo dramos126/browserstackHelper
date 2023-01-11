@@ -2,7 +2,7 @@ package com.ramos.danny.browserstack
 
 import com.ramos.danny.browserstack.response.BuildRequest
 import com.ramos.danny.client
-import com.ramos.danny.utils.toJsonElement
+import com.ramos.danny.utils.toJsonObject
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -13,27 +13,67 @@ class BrowserStack {
   private val failedSessions = mutableListOf<DeviceSessions>()
   private val failedTests = mutableListOf<String>()
 
-  suspend fun runFailedTests(browserStackBuild: BrowserStackBuild, shards: Int): String {
-    this.browserStackBuild = browserStackBuild
+  suspend fun runFailedTests(buildId: String, framework: String, shards: Int): Pair<HttpStatusCode, String> {
+    this.browserStackBuild = getBuild(buildId, framework)
     filterFailedTests()
     createRetryRequestObject(shards)
 
+    return newBuildRequest(framework, shards)
+  }
+
+  suspend fun buildResults(id: String, framework: String): JsonObject {
+    val build = getBuild(id, framework)
+    var totalTestCount = 0
+    var totalPassingCount = 0
+
+    build.devices.forEach { device ->
+      device.sessions.forEach { session ->
+        totalTestCount += session.testcases.count
+        totalPassingCount += session.testcases.status.passed
+      }
+    }
+
+    return mapOf(
+      "passed" to totalPassingCount,
+      "total" to totalTestCount
+    ).toJsonObject()
+  }
+
+  suspend fun newBuildRequest(
+    framework: String,
+    shards: Int,
+    body: JsonElement? = null
+  ): Pair<HttpStatusCode, String> {
     val url = URLBuilder(
       URLProtocol.HTTPS,
       hostURL,
-      pathSegments = listOf(appAutomate, browserStackBuild.framework, apiVersion, build)
+      pathSegments = listOf(appAutomate, framework, apiVersion, build)
     ).buildString()
 
     val response: BuildRequest = client.post(url) {
       headers { append(HttpHeaders.ContentType, "application/json") }
-      setBody(createRetryRequestObject(shards))
+      setBody(body ?: createRetryRequestObject(shards))
     }.body()
 
-    return response.build_id ?: ""
+    return if (response.build_id.isNullOrBlank()) {
+      Pair(HttpStatusCode.InternalServerError, "")
+    } else {
+      Pair(HttpStatusCode.OK, response.build_id)
+    }
+  }
+
+  private suspend fun getBuild(id: String, framework: String): BrowserStackBuild {
+    val buildURL = URLBuilder(
+      URLProtocol.HTTPS,
+      hostURL,
+      pathSegments = listOf(appAutomate, framework, apiVersion, builds, id)
+    ).buildString()
+
+    return client.get(buildURL).body()
   }
 
   private fun createRetryRequestObject(shards: Int): JsonElement {
-    var requestObject = mapOf(
+    val requestObject = mapOf(
       "shards" to createShardsObject(shards),
       "app" to browserStackBuild.input_capabilities.app,
       "testSuite" to browserStackBuild.input_capabilities.testSuite,
@@ -43,9 +83,13 @@ class BrowserStack {
       "networkLogs" to browserStackBuild.input_capabilities.networkLogs,
       "deviceLogs" to browserStackBuild.input_capabilities.deviceLogs,
       "debugscreenshots" to browserStackBuild.input_capabilities.debugscreenshots,
-      "devices" to browserStackBuild.input_capabilities.devices
+      "devices" to browserStackBuild.input_capabilities.devices,
+      "setEnvVariables" to mapOf(
+        "IS_BROWSERSTACK" to browserStackBuild.input_capabilities.setEnvVariables.IS_BROWSERSTACK,
+        "BUILD_NUMBER" to browserStackBuild.input_capabilities.setEnvVariables.BUILD_NUMBER
+      )
     )
-    return requestObject.toJsonElement()
+    return requestObject.toJsonObject()
   }
 
   private fun createShardsObject(shards: Int): Map<String, Any> {

@@ -18,7 +18,8 @@ data class Devices(
 @Serializable
 data class DeviceSessions(
   val id: String,
-  val status: String
+  val status: String,
+  val testcases: TestCaseCount
 )
 
 @Serializable
@@ -38,4 +39,15 @@ data class InputCapabilities(
 data class EnvVariables(
   val IS_BROWSERSTACK: Boolean,
   val BUILD_NUMBER: String?
+)
+
+@Serializable
+data class TestCaseCount(
+  val count: Int,
+  val status: TestCasesStatus
+)
+
+@Serializable data class TestCasesStatus(
+  val passed: Int,
+  val failed: Int
 )
